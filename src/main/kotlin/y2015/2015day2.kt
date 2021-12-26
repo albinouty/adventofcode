@@ -27,7 +27,23 @@ fun main(args: Array<String>) {
         println("The amount of paper the elves need is $paper")
     }
 
+    fun getSmallest(list: List<Int>): Int {
+        return list.indexOf(list.min())
+    }
+
+    fun calcRibbon(i: Triple<Int, Int, Int>): Int {
+        val tmp = i.toList().toMutableList()
+        val bow = tmp.reduce { acc, it -> acc * it }
+        val smallest = tmp.removeAt(getSmallest(tmp))
+        val secondSmallest = tmp.removeAt(getSmallest(tmp))
+        return (smallest*2) + (secondSmallest*2) + bow
+    }
+    var ribbon = 0
     fun part2() {
+        input.forEach {
+            ribbon += calcRibbon(it)
+        }
+        println("The amount of ribbon the elves wil need is $ribbon")
     }
     part1()
     part2()
