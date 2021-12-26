@@ -29,10 +29,9 @@ fun main(args: Array<String>) {
     }
 
     fun part2() {
-        var ans = 0
+        val ans: Int
         var iter = 1000000
-        val b = true
-        while(b) {
+        while(true) {
             val s = "$secretKey$iter"
             val hash = md5(s).substring(0 until zeros)
             if(hash == "000000") {
