@@ -32,29 +32,25 @@ fun main(args: Array<String>) {
         s.forEachIndexed { idx, c ->
             val stack = stackKey.indexOf(idx) + 1
             if (stack > 0) {
-                var tmp = finalCrates[stack]
+                val tmp = finalCrates[stack]
                 tmp!!.add(c)
-                finalCrates[stack] = tmp.filter { it != ' ' } as MutableList<Char>
+                finalCrates[stack] = tmp.filter { it != ' ' }.toMutableList()
             }
         }
     }
     finalCrates.forEach {
         val tmp = it.value.dropLast(1).reversed()
-        finalCrates[it.key] = tmp as MutableList<Char>
+        finalCrates[it.key] = tmp.toMutableList()
     }
     println(finalCrates)
-    fun moveCrates(stack: List<Char>, command: Triple<Int, Int, Int>) {
-        val lowerBound = command.first - 1
-        val upperBound = command.first
-        finalCrates[command.second] = finalCrates[command.second]!!.subList(0, lowerBound)
-        finalCrates[command.third] =
-            (stack.subList(lowerBound, upperBound).reversed() + finalCrates[command.third]!!).toMutableList()
-    }
     fun part1() {
         finalCommands.forEach {
             val origin = finalCrates[it.second]!!
-            moveCrates(origin, it)
+            val target = finalCrates[it.third]!!
+            finalCrates[it.third] =  (target + origin.takeLast(it.first).reversed()).toMutableList()
+            finalCrates[it.second] = origin.dropLast(it.first).toMutableList()
         }
+        println(finalCrates)
         var ans = ""
         finalCrates.forEach { s ->
             ans += s.value.last()
@@ -63,6 +59,22 @@ fun main(args: Array<String>) {
     }
 
     fun part2() {
+        finalCommands.forEach {
+            val origin = finalCrates[it.second]!!
+            val target = finalCrates[it.third]!!
+            finalCrates[it.third] =  (target + origin.takeLast(it.first)).toMutableList()
+            finalCrates[it.second] = origin.dropLast(it.first).toMutableList()
+        }
+        println(finalCrates)
+        var ans = ""
+        finalCrates.forEach { s ->
+            try {
+                ans += s.value.last()
+            } catch (e: NoSuchElementException) {
+                ans += ""
+            }
+        }
+        println("The answer is $ans")
     }
     part1()
     part2()
