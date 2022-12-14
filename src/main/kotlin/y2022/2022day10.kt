@@ -18,7 +18,10 @@ fun main(args: Array<String>) {
     fun part1() {
         var ans = 0
         cycles.forEach {cycle ->
-            val strength = cycle * (1 + program.subList(0, cycle - 1).sumBy { it.second } - program[cycle - 1].second)
+            val cycleCommand = program[cycle - 1]
+            val register = 1 + (program.subList(0, cycle - 1).sumBy { it.second })
+            val strength = cycle * register
+            println("Strength is $strength for cycle $cycle and register is $register. Cycle command is $cycleCommand")
             ans += strength
         }
         println("The signal strength is $ans")
